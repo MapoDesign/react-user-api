@@ -1,19 +1,27 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import Loading from "../Loading/Loading";
 
 const url = "https://api.github.com/users";
 
 const Users = () => {
     const [users, setUsers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true)
     const getData = async () => {
         const resp = await axios.get(url);
-        setUsers(resp.data);
+        setTimeout(() => {
+            setUsers(resp.data);
+            setIsLoading(false);
+        }, 2000);
     }
 
     useEffect(() => {
       getData();
     }, []);
 
+    if (isLoading) {
+        return <Loading/>
+    } 
     return(
         <div className="container" >
             <h1>Users DataBase</h1>
