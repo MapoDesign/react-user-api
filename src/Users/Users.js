@@ -7,12 +7,22 @@ const url = "https://api.github.com/users";
 const Users = () => {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
+    const [isError, setIsError] = useState(false)
+    
     const getData = async () => {
-        const resp = await axios.get(url);
-        setTimeout(() => {
-            setUsers(resp.data);
+        setIsLoading(true);
+        try {
+            const resp = await axios.get(url);
+            setTimeout(() => {
+                setUsers(resp.data);
+                setIsLoading(false);
+            }, 2000);
+        } catch (error) {
+            console.log(error);
+            setIsError(true);
             setIsLoading(false);
-        }, 2000);
+        }
+        
     }
 
     useEffect(() => {
@@ -22,6 +32,10 @@ const Users = () => {
     if (isLoading) {
         return <Loading/>
     } 
+    if (isError) {
+        return <Error/>
+    }
+
     return(
         <div className="container" >
             <h1>Users DataBase</h1>
@@ -47,3 +61,10 @@ const Users = () => {
 };
 
 export default Users;
+
+const Error = () => {
+    return (<div>
+        <p className="text-white">There is an Error!</p>
+    </div>
+    )
+}
